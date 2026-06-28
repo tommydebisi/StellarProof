@@ -1,0 +1,38 @@
+name: Wave candidate
+description: Propose work for a Drips Wave sprint (Stellar program)
+title: "[wave] "
+labels: ["wave-candidate"]
+body:
+  - type: dropdown
+    id: complexity
+    attributes:
+      label: Suggested complexity
+      options:
+        - trivial (100 pts)
+        - medium (150 pts)
+        - high (200 pts)
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: What should be done?
+      description: Clear acceptance criteria for contributors.
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Why / ecosystem impact
+      description: How this helps Stellar/Soroban builders and content provenance.
+    validations:
+      required: true
+  - type: checkboxes
+    id: scope
+    attributes:
+      label: Scope check
+      options:
+        - label: Completable within one Wave sprint (~1 week)
+          required: true
+        - label: Has clear "done" criteria (tests or docs)
+          required: true

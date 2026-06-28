@@ -19,12 +19,14 @@ node_modules
 dist
 dist-ssr
 *.local
-scripts
+# scripts/ — deploy scripts are tracked for contributors
 
 #ENV File
 .env
 
- Editor directories and files
+.stellarproof/deployments.json
+.eslintcache
+frontend/.eslintcache
 .vscode/*
 !.vscode/extensions.json
 extensions.json

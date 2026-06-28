@@ -1,0 +1,11 @@
+[workspace]
+members = [
+  "contracts/provenance",
+  "contracts/stellarproof",
+  "contracts/registry",
+  "contracts/oracle",
+]
+resolver = "2"
+
+[workspace.dependencies]
+soroban-sdk = "25.1.0"

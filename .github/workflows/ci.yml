@@ -2,42 +2,53 @@ name: CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [main]
   pull_request:
-    branches: [ "main" ]
+    branches: [main]
 
 jobs:
-  build-and-check:
+  contracts:
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - name: Install Rust
-      uses: actions-rs/toolchain@v1
-      with:
-        toolchain: stable
-        target: wasm32-unknown-unknown
-        override: true
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32v1-none
 
-    - name: Install Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: 20
+      - name: Cache cargo
+        uses: swatinem/rust-cache@v2
 
-    - name: Enable Corepack
-      run: corepack enable
+      - name: Build provenance WASM (required by stellarproof contractimport)
+        run: cargo build --manifest-path contracts/provenance/Cargo.toml --target wasm32v1-none --release
 
-    - name: Install dependencies
-       run: pnpm install --no-frozen-lockfile
+      - name: Test all contracts
+        run: cargo test --workspace
 
-    - name: Lint Frontend
-      run: pnpm check:frontend
+      - name: Build all contract WASM
+        run: make -C contracts build
 
-    - name: Build Frontend
-      run: pnpm build:frontend
+  frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
 
-    - name: Build Smart Contracts
-      run: |
-        cd contracts/stellarproof
-        cargo build --target wasm32-unknown-unknown --release
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Install dependencies
+        run: pnpm install --no-frozen-lockfile
+
+      - name: Lint frontend
+        run: pnpm check:frontend
+
+      - name: Test frontend
+        run: pnpm test:frontend
+
+      - name: Build frontend
+        run: pnpm build:frontend

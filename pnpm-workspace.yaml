@@ -1,5 +1,2 @@
 packages:
   - "frontend"
-  - "oracle-worker"
-  - "packages/*"
-  - "services/*"
